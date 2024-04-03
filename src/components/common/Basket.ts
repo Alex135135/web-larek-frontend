@@ -26,7 +26,7 @@ export class Basket extends Component<IBasketUI> {
 	}
 
 	set total(price: number) {
-		this.setText(this._button, price + ' синапсов');
+		this.setText(this._total, price + ' синапсов');
 	}
 
 	set list(items: HTMLElement[]) {

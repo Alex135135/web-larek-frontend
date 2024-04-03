@@ -54,8 +54,11 @@ export class Card extends Component<IProduct> {
       this.setText(this._category, value);
     }
 
-    set price (value: number | null) {
-      this.setText(this._price, value ? `${value} синапсов` : "Бесценно")
+    set price(value: number | null) {
+      this.setText(
+        this._price,
+        value ? `${value.toString()} синапсов` : 'Бесценно'
+      );
     }
 
     get price (): number {
@@ -71,20 +74,27 @@ export class Card extends Component<IProduct> {
       this.setText(this._description, value);
     }
 
-    set button (value: string ) {
-      if (this.price === 0) {
+    set button(value: string) {
+      if (this._price.textContent === 'Бесценно') {
         this._button.disabled = true;
-        this.setText(this._button, "Нельзя купить")
-      } else {
-        this.setText(this._button, value)
-      }
+        this.setText(this._button, 'Нельзя купить');
+      } else this.setText(this._button, value);
     }
+
 
     set selected (value: boolean) {
       if (value) {
         this.button = "Убрать из корзины"
       } else {
         this.button = "В корзину"
+      }
+    }
+
+    updateButton(selected: boolean) {
+      if (selected) {
+        this.button = 'Убрать из корзины';
+      } else {
+        this.button = 'В корзину';
       }
     }
 }
