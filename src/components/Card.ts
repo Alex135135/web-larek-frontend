@@ -1,6 +1,6 @@
-import {Component} from "../base/Component";
-import {IProduct} from "../../types";
-import {ensureElement} from "../../utils/utils";
+import {Component} from "./base/Component";
+import {IProduct} from "../types";
+import {ensureElement} from "../utils/utils";
 
 interface ICardActions {
     onClick: (event: MouseEvent) => void;
@@ -76,18 +76,9 @@ export class Card extends Component<IProduct> {
 
     set button(value: string) {
       if (this._price.textContent === 'Бесценно') {
-        this._button.disabled = true;
+        this.setDisabled(this._button, true);
         this.setText(this._button, 'Нельзя купить');
       } else this.setText(this._button, value);
-    }
-
-
-    set selected (value: boolean) {
-      if (value) {
-        this.button = "Убрать из корзины"
-      } else {
-        this.button = "В корзину"
-      }
     }
 
     updateButton(selected: boolean) {
@@ -105,7 +96,10 @@ export class CardPreview extends Card {
 	constructor(container: HTMLElement, actions?: ICardActions) {
 		super('card', container, actions);
 		this._description = container.querySelector(`.${this.blockName}__text`);
+
 	}
+
+
 
 	set description(value: string) {
 		this.setText(this._description, value);

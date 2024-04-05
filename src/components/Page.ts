@@ -1,8 +1,8 @@
 
-import {Component} from "../base/Component";
-import {IEvents} from "../base/events";
-import {ensureElement} from "../../utils/utils";
-import { IPageUI } from "../../types";
+import {Component} from "./base/Component";
+import {IEvents} from "./base/Events";
+import {ensureElement} from "../utils/utils";
+import { IPageUI } from "../types";
 
 export class Page extends Component<IPageUI> {
     protected _counter: HTMLElement;
@@ -34,9 +34,9 @@ export class Page extends Component<IPageUI> {
 
     set locked(value: boolean) {
         if (value) {
-            this._wrapper.classList.add('page__wrapper_locked');
+            this.toggleClass(this._wrapper, 'page__wrapper_locked', true);
         } else {
-            this._wrapper.classList.remove('page__wrapper_locked');
+            this.toggleClass(this._wrapper, 'page__wrapper_locked', false);
         }
     }
 }

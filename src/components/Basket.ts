@@ -1,6 +1,6 @@
-import { IBasketUI,  IProductInBasket } from '../../types';
-import { Component } from '../base/Component';
-import { IEvents } from '../base/events';
+import { IBasketUI,  IProductInBasket } from '../types';
+import { Component } from './base/Component';
+import { IEvents } from './base/Events';
 
 export class Basket extends Component<IBasketUI> {
 	protected _list: HTMLElement;
@@ -31,21 +31,13 @@ export class Basket extends Component<IBasketUI> {
 
 	set list(items: HTMLElement[]) {
 		this._list.replaceChildren(...items);
-		this.toggleButton(items.length ? false : true);
+		this.toggleButton(!items.length);
 	}
 
 	toggleButton(isDisabled: boolean) {
-		this._button.disabled = isDisabled;
+		this.setDisabled(this._button, isDisabled)
 	}
 
-	updateIndices() {
-		Array.from(this._list.children).forEach((item, index) => {
-			const indexInItem = item.querySelector(`.basket__item-index`);
-			if (indexInItem) {
-				indexInItem.textContent = (index + 1).toString();
-			}
-		});
-	}
 }
 
 export interface IProductItemBasketActions {

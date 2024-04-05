@@ -1,5 +1,5 @@
-import { Model } from "../base/Model";
-import { IProduct, IOrder, IAppState, FormErrors, IOrderValidate } from "../../types";
+import { Model } from "./base/Model";
+import { IProduct, IOrder, IAppState, FormErrors, IOrderValidate } from "../types";
 
 export class Product extends Model<IProduct> {
 	id: string;

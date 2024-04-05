@@ -1,6 +1,6 @@
-import { IPaymentFormUI } from '../../types';
-import { IEvents } from '../base/events';
-import { Form } from './Form';
+import { IPaymentFormUI } from '../types';
+import { IEvents } from './base/Events';
+import { Form } from './common/Form';
 
 export class OrderForm extends Form<IPaymentFormUI> {
 	protected _card: HTMLButtonElement;
@@ -20,23 +20,23 @@ export class OrderForm extends Form<IPaymentFormUI> {
 
 		if (this._cash) {
 			this._cash.addEventListener('click', () => {
-				this._cash.classList.add('button_alt-active');
-				this._card.classList.remove('button_alt-active');
+				this.toggleClass(this._cash, 'button_alt-active', true);
+				this.toggleClass(this._card, 'button_alt-active', false);
 				this.onInputChange('payment', 'cash');
 			});
 		}
 		if (this._card) {
 			this._card.addEventListener('click', () => {
-				this._card.classList.add('button_alt-active');
-				this._cash.classList.remove('button_alt-active');
+				this.toggleClass(this._cash, 'button_alt-active', false);
+				this.toggleClass(this._card, 'button_alt-active', true);
 				this.onInputChange('payment', 'card');
 			});
 		}
 	}
 
 	clear() {
-		this._card.classList.remove('button_alt-active');
-		this._cash.classList.remove('button_alt-active');
+		this.toggleClass(this._cash, 'button_alt-active', false);
+		this.toggleClass(this._card, 'button_alt-active', false);
 		this._address.value = '';
 	}
 }

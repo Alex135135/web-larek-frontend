@@ -2,19 +2,19 @@ import './scss/styles.scss';
 import {
 	IContactsFormUI,
 	IOrderResult,
-	IOrderValidate,
+	IOrderValidate, IPaymentFormUI,
 } from './types';
-import { EventEmitter } from './components/base/events';
+import { EventEmitter } from './components/base/Events';
 import { ensureElement, cloneTemplate } from './utils/utils';
-import { LarekAPI } from './components/common/LarekAPI';
-import { AppState, Product } from './components/common/AppState';
+import { LarekAPI } from './components/LarekAPI';
+import { AppState, Product } from './components/AppState';
 import { Modal } from './components/common/Modal';
-import { Basket, ProductItemBasket } from './components/common/Basket';
-import { OrderForm } from './components/common/OrderForm';
-import { ContactsForm } from './components/common/ContactsForm';
-import { SuccessForm } from './components/common/SuccessForm';
-import { Page } from './components/common/Page';
-import { Card, CardPreview } from './components/common/Card';
+import { Basket, ProductItemBasket } from './components/Basket';
+import { OrderForm } from './components/OrderForm';
+import { ContactsForm } from './components/ContactsForm';
+import { SuccessForm } from './components/SuccessForm';
+import { Page } from './components/Page';
+import { Card, CardPreview } from './components/Card';
 
 import { API_URL, CDN_URL } from './utils/constants';
 
@@ -75,14 +75,17 @@ events.on('card:select', (product: Product) => {
 			onClick: () => {
 				if (product.selected) {
 					events.emit('basket:removeFromBasket', product);
+					modal.close();
 				} else {
 					events.emit('card:addToBasket', product);
 					modal.close();
-				}
+				} 
 				productItemPreview.updateButton(product.selected);
 			},
 		}
 	);
+
+	productItemPreview.updateButton(product.selected);
 
 	modal.render({
 		content: productItemPreview.render({
@@ -109,7 +112,26 @@ events.on('basket:removeFromBasket', (product: Product) => {
 	product.selected = false;
 	basket.total = appData.getTotalBasketPrice();
 	page.counter = appData.getCountProductInBasket();
-	basket.updateIndices();
+	const basketItems = appData.basket.map((item, index) => {
+		const productItem: ProductItemBasket = new ProductItemBasket(
+			'card',
+			cloneTemplate(cardBasketTemplate),
+			{
+				onClick: () => events.emit('basket:removeFromBasket', productItem),
+			}
+		);
+		return productItem.render({
+			title: item.title,
+			price: item.price,
+			index: index + 1,
+		});
+	});
+	modal.render({
+		content: basket.render({
+			list: basketItems,
+			total: appData.getTotalBasketPrice(),
+		}),
+	});
 	if (appData.getCountProductInBasket() == 0) {
 		basket.toggleButton(true);
 	}
@@ -118,7 +140,7 @@ events.on('basket:removeFromBasket', (product: Product) => {
 events.on('basket:open', () => {
 	page.locked = true;
 	const basketItems = appData.basket.map((item, index) => {
-		const productItem = new ProductItemBasket(
+		const productItem: ProductItemBasket = new ProductItemBasket(
 			'card',
 			cloneTemplate(cardBasketTemplate),
 			{
@@ -131,7 +153,6 @@ events.on('basket:open', () => {
 			index: index + 1,
 		});
 	});
-  console.log()
 	modal.render({
 		content: basket.render({
 			list: basketItems,
@@ -154,11 +175,31 @@ events.on('basket:order', () => {
 // order
 
 events.on(
-	'orderInput:change',
+	'order.payment:change', (data: { field: keyof IPaymentFormUI; value: string }) => {
+		appData.setOrderFields(data.field, data.value);
+	}
+)
+
+events.on(
+	'order.address:change',
 	(data: { field: keyof IOrderValidate; value: string }) => {
 		appData.setOrderFields(data.field, data.value);
 	}
-);
+)
+
+events.on(
+	'contacts.email:change',
+	(data: { field: keyof IContactsFormUI; value: string }) => {
+		appData.setOrderFields(data.field, data.value);
+	}
+)
+
+events.on(
+	'contacts.phone:change',
+	(data: { field: keyof IContactsFormUI; value: string }) => {
+		appData.setOrderFields(data.field, data.value);
+	}
+)
 
 events.on('orderFormErrors:change', (errors: Partial<IOrderValidate>) => {
 	const { payment, address } = errors;

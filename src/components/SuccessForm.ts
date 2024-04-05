@@ -1,6 +1,6 @@
-import { ISuccessFormUI } from '../../types';
-import { ensureElement } from '../../utils/utils';
-import { Component } from '../base/Component';
+import { ISuccessFormUI } from '../types';
+import { ensureElement } from '../utils/utils';
+import { Component } from './base/Component';
 
 interface ISuccessActions {
 	onClick: (event: MouseEvent) => void;

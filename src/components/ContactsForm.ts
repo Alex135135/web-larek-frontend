@@ -1,6 +1,6 @@
-import { IContactsFormUI } from '../../types';
-import { IEvents } from '../base/events';
-import { Form } from './Form';
+import { IContactsFormUI } from '../types';
+import { IEvents } from './base/Events';
+import { Form } from './common/Form';
 
 export class ContactsForm extends Form<IContactsFormUI> {
 	protected _phoneNumber: HTMLInputElement;
@@ -13,6 +13,14 @@ export class ContactsForm extends Form<IContactsFormUI> {
 			'phone'
 		) as HTMLInputElement;
 		this._email = container.elements.namedItem('email') as HTMLInputElement;
+	}
+
+	set phoneNumber(value: string) {
+		this._phoneNumber.value = value;
+	}
+
+	set email(value: string) {
+		this._email.value = value;
 	}
 
 	clear() {
