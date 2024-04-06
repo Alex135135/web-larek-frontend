@@ -79,7 +79,7 @@ events.on('card:select', (product: Product) => {
 				} else {
 					events.emit('card:addToBasket', product);
 					modal.close();
-				} 
+				}
 				productItemPreview.updateButton(product.selected);
 			},
 		}
@@ -117,7 +117,7 @@ events.on('basket:removeFromBasket', (product: Product) => {
 			'card',
 			cloneTemplate(cardBasketTemplate),
 			{
-				onClick: () => events.emit('basket:removeFromBasket', productItem),
+				onClick: () => events.emit('basket:removeFromBasket', item),
 			}
 		);
 		return productItem.render({

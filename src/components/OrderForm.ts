@@ -20,23 +20,31 @@ export class OrderForm extends Form<IPaymentFormUI> {
 
 		if (this._cash) {
 			this._cash.addEventListener('click', () => {
-				this.toggleClass(this._cash, 'button_alt-active', true);
-				this.toggleClass(this._card, 'button_alt-active', false);
+				this.toggleCash(true)
+				this.toggleCard(false)
 				this.onInputChange('payment', 'cash');
 			});
 		}
 		if (this._card) {
 			this._card.addEventListener('click', () => {
-				this.toggleClass(this._cash, 'button_alt-active', false);
-				this.toggleClass(this._card, 'button_alt-active', true);
+				this.toggleCash(false)
+				this.toggleCard(true)
 				this.onInputChange('payment', 'card');
 			});
 		}
 	}
 
+	toggleCash(state: boolean) {
+		this.toggleClass(this._cash, 'button_alt-active', state);
+	}
+
+	toggleCard(state: boolean) {
+		this.toggleClass(this._card, 'button_alt-active', state);
+	}
+
 	clear() {
-		this.toggleClass(this._cash, 'button_alt-active', false);
-		this.toggleClass(this._card, 'button_alt-active', false);
+		this.toggleCash(false)
+		this.toggleCard(false)
 		this._address.value = '';
 	}
 }

@@ -59,6 +59,11 @@ export class Card extends Component<IProduct> {
         this._price,
         value ? `${value.toString()} синапсов` : 'Бесценно'
       );
+
+      if (value === null) {
+        this.setDisabled(this._button, true);
+        this.setText(this._button, 'Нельзя купить');
+      }
     }
 
     get price (): number {
@@ -78,7 +83,9 @@ export class Card extends Component<IProduct> {
       if (this._price.textContent === 'Бесценно') {
         this.setDisabled(this._button, true);
         this.setText(this._button, 'Нельзя купить');
-      } else this.setText(this._button, value);
+      } else {
+        this.setText(this._button, value);
+      }
     }
 
     updateButton(selected: boolean) {
@@ -96,7 +103,6 @@ export class CardPreview extends Card {
 	constructor(container: HTMLElement, actions?: ICardActions) {
 		super('card', container, actions);
 		this._description = container.querySelector(`.${this.blockName}__text`);
-
 	}
 
 
